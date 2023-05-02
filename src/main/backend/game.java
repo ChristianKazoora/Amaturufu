@@ -62,9 +62,6 @@ public class game {
               clickedCard = clicked(clicked);
               cpuCard = cpuPlay();
               wins(clickedCard, cpuCard);
-              System.out.println("Player wins:"+allPlayerWins);
-              System.out.println("CPU wins:"+allCpuWins);
-              cpuCards();
               cpuPlayedTwice = false;
           }
             //cpu plays first
@@ -79,14 +76,11 @@ public class game {
             else if(!winner && cpuPlayedTwice){
                 clickedCard = clicked(clicked);
                 wins(clickedCard, cpuCard);
-              System.out.println("Player wins:"+allPlayerWins);
-              System.out.println("CPU wins:"+allCpuWins);
-              cpuCards();
                 cpuPlayedTwice = false;
             }
       }
         while(!winner &&!cpuPlayedTwice&&!playCards.equals(nullCards) && !Loader.cpuCards.equals(nullCards));
-        if (playCards.equals(nullCards) && Loader.cpuCards.equals(nullCards))
+        if (playCards.equals(nullCards) && deal.cpuCards.equals(nullCards))
         {
             ender();
         }
@@ -214,25 +208,7 @@ public class game {
 
         int pCount=allPlayerWins;
         int cpuCount=allCpuWins;
-        if(pCount >cpuCount)
 
-        {
-            System.out.println("---------------------");
-            System.out.println("PLAYER WINS");
-            System.out.println("---------------------");
-        } else if(pCount<cpuCount)
-
-        {
-            System.out.println("---------------------");
-            System.out.println("CPU Wins");
-            System.out.println("---------------------");
-        }else
-
-        {
-            System.out.println("---------------------");
-            System.out.println("IT'S A TIE");
-            System.out.println("---------------------");
-        }
 
         System.out.println("----------");
         System.out.println("Player Wins");
@@ -256,6 +232,25 @@ public class game {
             cpuCounter = cpuCounter+ Cwins.getValue();
         }
         System.out.println("cpuScore- "+ cpuCounter);
+        if(pCount >cpuCount)
+
+        {
+            System.out.println("---------------------");
+            System.out.println("PLAYER WINS");
+            System.out.println("---------------------");
+        } else if(pCount<cpuCount)
+
+        {
+            System.out.println("---------------------");
+            System.out.println("CPU Wins");
+            System.out.println("---------------------");
+        }else
+
+        {
+            System.out.println("---------------------");
+            System.out.println("IT'S A TIE");
+            System.out.println("---------------------");
+        }
     }
     public static int playerScore()
     {

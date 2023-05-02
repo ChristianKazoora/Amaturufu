@@ -2,9 +2,9 @@ package main.backend;
 
 public class Card {
     //Variable for card getValue
-    String card=null;
+    String card;
     //variable for suit
-    String suit=null;
+    String suit;
 
 
 

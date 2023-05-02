@@ -25,42 +25,20 @@ public class Cpu {
         this.playedCard=playedCard;
         Card returner;
 
-        if (Loader.Deck.size() == 0) {
-
-                if(playedCard==null)
-                {
-                    System.out.println("CPU's thoughts on the player's played card: "+playedCard);
-                    System.out.println("CPU's thoughts on the iturufu: "+iturufu);
-                    returner= FirstToPlay();
-                }
-                else
-                {
-                    System.out.println("CPU's thoughts on the player's played card: "+playedCard);
-                    System.out.println("CPU's thoughts on the iturufu: "+iturufu);
-                    returner= SecondToPlay();
-                }
-
-                cards.add(new Card("1", "\tH"));
-
-
-        }
-        //checking if the CPU card array is empty
-       else {
-
             if(playedCard==null)
             {
-                System.out.println("CPU's thoughts on the player's played card: "+playedCard);
-                System.out.println("CPU's thoughts on the iturufu: "+iturufu);
+
                 returner= FirstToPlay();
             }
             else
             {
-                System.out.println("CPU's thoughts on the player's played card: "+playedCard);
-                System.out.println("CPU's thoughts on the iturufu: "+iturufu);
                 returner= SecondToPlay();
             }
-       }
-       return returner;
+
+            if(Loader.Deck.size() == 0)
+                cards.add(new Card("1", "\tH"));
+
+        return returner;
     }
     private Card FirstToPlay()
     {
@@ -81,6 +59,7 @@ public class Cpu {
                     toReturn=card;
             }
         }
+       // System.out.println("FirstToPlay - CPU played: "+toReturn);
         cards.remove(toReturn);
         return toReturn;
     }
@@ -90,7 +69,6 @@ public class Cpu {
         //    check to see if the player played a card with the same suite as the Iturufu
         //        if its not of high value, play the card with the least points
         //        if it is of high value, and CPU has one with higher value, play the higher value card and eat
-        //        if it is of high value, and CPU does not have one with higher value, play the card with the least points
 
         Card toBeReturned=new Card("1","\tH");
         if(playedCard.getSuite().equals(iturufu.getSuite()))
@@ -105,12 +83,16 @@ public class Cpu {
                 }
                 if(toBeReturned.getValue()==Integer.MAX_VALUE&& !card.getSuite().equals(iturufu.getSuite()))
                     toBeReturned=card;
+
+                if(toBeReturned.getValue()==Integer.MAX_VALUE)
+                    toBeReturned=card;
             }
+          //  System.out.println("SecondToPlay (if iturufu suite == played sute) - CPU played: "+toBeReturned);
         }
         else
         {
 
-            if(playedCard.getValue()>2||playedCard.getValue()<=10&&cardsContainIturufuSuit())
+            if(playedCard.getValue()>2&&playedCard.getValue()<=10&&cardsContainIturufuSuit())
             {
                 for(Card card:cards)
                 {
@@ -119,6 +101,7 @@ public class Cpu {
                         toBeReturned=card;
                     }
                 }
+             //   System.out.println("SecondToPlay (if iturufu suite != played suite but between (2-10)) - CPU played: "+toBeReturned);
             }
             else
             {
@@ -133,11 +116,13 @@ public class Cpu {
 
                         if(toBeReturned.getValue()==Integer.MAX_VALUE&& !card.getSuite().equals(iturufu.getSuite()))
                             toBeReturned=card;
+
+                        if(toBeReturned.getValue()==Integer.MAX_VALUE)
+                            toBeReturned=card;
                     }
                 }
+             //   System.out.println("SecondToPlay (if iturufu suite != played suite and not between (2-10) play least value) - CPU played: "+toBeReturned);
             }
-
-
         }
         cards.remove(toBeReturned);
         return toBeReturned;
@@ -155,4 +140,3 @@ public class Cpu {
     }
 
 }
-//Increased difficulty by checking if the played suit and number  is greater than possible options to play
