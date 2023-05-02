@@ -5,8 +5,8 @@ import java.util.Stack;
 
 public class game {
     public static Deck deal;
-    public static boolean first = true;
-    static boolean firstToPlay;
+    public static boolean winner = true;
+    static boolean playedFirst;
     public static Card CPUreturned;
     public static Card iturufu;
     public static ArrayList<Card> playCards;
@@ -25,28 +25,18 @@ public class game {
         iturufu = deal.iturufu();
         playCards = deal.playerCards;
         deal.startingPick();
-        Card nullCard = new Card("0", "\tH");
+        Card nullCard = new Card("1", "\tH");
         nullCards.add(0,nullCard);nullCards.add(1,nullCard);nullCards.add(2,nullCard);nullCards.add(3,nullCard);
 
     }
     public static Card clicked(int clicked) {
         Card playedCard = null;
 
-        //try play with player first
-        try {
+        //try play with player winner
             //played card
             playedCard = playCards.get(clicked);
             thePlay(clicked);
 
-        } catch (Exception e) {
-
-            Exception End = new EndException("The END");
-            Exception invalid = new InvalidIn("Invalid");
-
-            if (!(e.getLocalizedMessage().equals(End.getLocalizedMessage()))) {System.out.println("Invalid");} else {
-                e.getLocalizedMessage();
-            }
-        }
         return playedCard;
     }
     private static Card cpuPlay() {
@@ -66,28 +56,36 @@ public class game {
 
       do
       {
-          if (first&&!cpuPlayedTwice) {
-              firstToPlay = true;
+          //player plays first
+          if (winner &&!cpuPlayedTwice) {
+              playedFirst = true;
               clickedCard = clicked(clicked);
               cpuCard = cpuPlay();
               wins(clickedCard, cpuCard);
+              System.out.println("Player wins:"+allPlayerWins);
+              System.out.println("CPU wins:"+allCpuWins);
+              cpuCards();
               cpuPlayedTwice = false;
           }
-          else if(!first&&!cpuPlayedTwice){
-              firstToPlay = false;
+            //cpu plays first
+          else if(!winner &&!cpuPlayedTwice){
+              playedFirst = false;
                cpuTemp = cpuCard;
                playerTemp = clickedCard;
               cpuCard = cpuPlay();
               cpuPlayedTwice = true;
           }
-            else if(!first&&cpuPlayedTwice){
+          // cpu already played first
+            else if(!winner && cpuPlayedTwice){
                 clickedCard = clicked(clicked);
                 wins(clickedCard, cpuCard);
-
+              System.out.println("Player wins:"+allPlayerWins);
+              System.out.println("CPU wins:"+allCpuWins);
+              cpuCards();
                 cpuPlayedTwice = false;
             }
       }
-        while(!first&&!cpuPlayedTwice&&!playCards.equals(nullCards) && !Loader.cpuCards.equals(nullCards));
+        while(!winner &&!cpuPlayedTwice&&!playCards.equals(nullCards) && !Loader.cpuCards.equals(nullCards));
         if (playCards.equals(nullCards) && Loader.cpuCards.equals(nullCards))
         {
             ender();
@@ -102,42 +100,64 @@ public class game {
         if (!(playedCard.getSuite().equals(iturufu.getSuite())) && !(cpuCard.getSuite().equals(iturufu.getSuite()))) {
             //if not the same to the iturufu, we check to see if the cpu and player cards are the same
             if ((playedCard.getSuite().equals(cpuCard.getSuite()))) {
-                // if both suits are the same but different from the iturufu suite we check for the value of the card
-                if (playedCard.value()>cpuCard.value()) {
-                    first = true;
+                // if both suits are the same but different from the iturufu suite we check for the getValue of the card
+                if (playedCard.getValue()>cpuCard.getValue()) {
+                    winner = true;
                     playerWins.push(playedCard);
                     playerWins.push(cpuCard);
-                    allPlayerWins += playedCard.value();
-                    allPlayerWins += cpuCard.value();
+                    allPlayerWins += playedCard.getValue();
+                    allPlayerWins += cpuCard.getValue();
                     System.out.println("Umukinyi arayariye");
-                }else{
-                    first = false;
+                }else if(playedCard.getValue()<cpuCard.getValue()){
+                    winner = false;
                     cpuWins.push(playedCard);
                     cpuWins.push(cpuCard);
-                    allCpuWins += playedCard.value();
-                    allCpuWins += cpuCard.value();
+                    allCpuWins += playedCard.getValue();
+                    allCpuWins += cpuCard.getValue();
                     System.out.println("Machine irayariye");
+                }else
+                {
+                    //if both suits are the same and the values are the same
+                    if(playedFirst)
+                    {
+                        winner = true;
+                        playerWins.push(playedCard);
+                        playerWins.push(cpuCard);
+                        allPlayerWins += playedCard.getValue();
+                        allPlayerWins += cpuCard.getValue();
+                        System.out.println("Umukinyi arayariye");
+                    }
+                    else
+                    {
+                        winner = false;
+                        cpuWins.push(playedCard);
+                        cpuWins.push(cpuCard);
+                        allCpuWins += playedCard.getValue();
+                        allCpuWins += cpuCard.getValue();
+                        System.out.println("Machine irayariye");
+                    }
                 }
 
             } else {
-                // if the played card suit does not equal the next played suit and none suits equal the iturufu suit the one who played first wins
+                // if the played card suit does not equal the next played suit and none suits equal the iturufu suit the one who played winner wins
 
-                if (first) {
+                if (playedFirst) {
                     //player wins
-                    first = true;
+                    winner = true;
                     playerWins.push(playedCard);
                     playerWins.push(cpuCard);
-                    allPlayerWins += playedCard.value();
-                    allPlayerWins += cpuCard.value();
+                    allPlayerWins += playedCard.getValue();
+                    allPlayerWins += cpuCard.getValue();
                     System.out.println("Umukinyi arayariye");
+
 
                 } else {
                     //cpu wins
-                    first = false;
+                    winner = false;
                     cpuWins.push(playedCard);
                     cpuWins.push(cpuCard);
-                    allCpuWins += playedCard.value();
-                    allCpuWins += cpuCard.value();
+                    allCpuWins += playedCard.getValue();
+                    allCpuWins += cpuCard.getValue();
                     System.out.println("Machine irayariye");
                 }
             }
@@ -146,43 +166,43 @@ public class game {
             if (playedCard.suit.equals(iturufu.suit) && cpuCard.suit.equals(iturufu.suit))
             {
                 //if both suits are the same but with different values
-                if(playedCard.value()>cpuCard.value())
+                if(playedCard.getValue()>cpuCard.getValue())
                 {
-                    first = true;
+                    winner = true;
                     playerWins.push(playedCard);
                     playerWins.push(cpuCard);
-                    allPlayerWins += playedCard.value();
-                    allPlayerWins += cpuCard.value();
+                    allPlayerWins += playedCard.getValue();
+                    allPlayerWins += cpuCard.getValue();
                     System.out.println("Umukinyi arayariye");
                 }
                 else
                 {
-                    first = false;
+                    winner = false;
                     cpuWins.push(playedCard);
                     cpuWins.push(cpuCard);
-                    allCpuWins += playedCard.value();
-                    allCpuWins += cpuCard.value();
+                    allCpuWins += playedCard.getValue();
+                    allCpuWins += cpuCard.getValue();
                     System.out.println("Machine irayariye");
                 }
             }
             //if player suit is the same as the iturufu but diffrent from cpu
             else if (playedCard.suit.equals(iturufu.suit)) {
-                first = true;
+                winner = true;
                 playerWins.push(playedCard);
                 playerWins.push(cpuCard);
-                allPlayerWins += playedCard.value();
-                allPlayerWins += cpuCard.value();
+                allPlayerWins += playedCard.getValue();
+                allPlayerWins += cpuCard.getValue();
                 System.out.println("Umukinyi arayariye");
 
 
             }
             else{
                 //cpu wins
-                first = false;
+                winner = false;
                 cpuWins.push(playedCard);
                 cpuWins.push(cpuCard);
-                allCpuWins += playedCard.value();
-                allCpuWins += cpuCard.value();
+                allCpuWins += playedCard.getValue();
+                allCpuWins += cpuCard.getValue();
                 System.out.println("Machine irayariye");
             }
         }
@@ -217,10 +237,11 @@ public class game {
         System.out.println("----------");
         System.out.println("Player Wins");
         System.out.println("----------");
+
         int pCounter =0;
         for (Card wins : playerWins) {
-            System.out.println(wins.getCard()+" - "+wins.value());
-            pCounter = pCounter+ wins.value();
+            System.out.println(wins.getCard()+" - "+wins.getValue());
+            pCounter = pCounter+ wins.getValue();
         }
         System.out.println("pScore- "+ pCounter);
 
@@ -228,10 +249,11 @@ public class game {
         System.out.println("----------");
         System.out.println("CPU Wins");
         System.out.println("----------");
+
         int cpuCounter =0;
         for (Card Cwins : cpuWins) {
-            System.out.println(Cwins.getCard()+" - "+Cwins.value());
-            cpuCounter = cpuCounter+ Cwins.value();
+            System.out.println(Cwins.getCard()+" - "+Cwins.getValue());
+            cpuCounter = cpuCounter+ Cwins.getValue();
         }
         System.out.println("cpuScore- "+ cpuCounter);
     }
@@ -253,54 +275,45 @@ public class game {
         System.out.println("\n------------------------------------------------------------------------");
     }
 
-    public static ArrayList<Card> thePlay(int clicked) {
+    public static void thePlay(int clicked) {
 
 
 
         System.out.println("Player Played: "+playCards.get(clicked));
         System.out.println("------------------------------");
         if (deal.Deck.size()==0) {
-            playCards.set(clicked, new Card("0", "\tH"));
+            playCards.set(clicked, new Card("1", "\tH"));
         }
         else {
             playCards.remove(clicked);
             deal.playerPick1(clicked);
         }
 
-        return playCards;
-
 
     }
 
 
     public static Card theCpuPlay(Deck deal, Card iturufu) throws InterruptedException {
-
-
-        System.out.println("------------------------------");
-        System.out.print("CPU Play: ");
-
-
         Cpu cpu = new Cpu(deal.cpuCards);
-        CPUreturned = cpu.play();
-        // Play(CPUreturned.toString());
 
+        if(winner&&!cpuPlayedTwice)
+        {
+            CPUreturned = cpu.play(iturufu,clickedCard);
+        }else
+        {
+            CPUreturned = cpu.play(iturufu,null);
+        }
 
         if (deal.Deck.size() != 0) {
             deal.cpuPick1();
         }
 
+        System.out.println("------------------------------");
+        System.out.print("CPU Play: ");
         System.out.println(CPUreturned.getCard());
         System.out.println("------------------------------");
 
         return CPUreturned;
     }
 
-    public static int score(Stack<Card> cards){
-        int Score = 0;
-        for (Card card:cards)
-        {
-            Score  += card.value();
-        }
-        return Score;
-    }
 }

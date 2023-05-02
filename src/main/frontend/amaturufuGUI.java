@@ -219,7 +219,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
       //  playedCard2.setIcon(card);
     }
     ImageIcon GetCpuCardIcon(String val){
-        // Split the string and assign the first two characters of the second element to the image
+        // Split the string and assign the winner two characters of the second element to the image
         String [] pic = val.toString().split(" ");
         String image = pic[0]+pic[1].charAt(1)+".png";
 
@@ -257,7 +257,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
                  button1.setEnabled(false);
                  try {
                      game.play(0);
-                     if(!playerCards.get(0).getCard().equals("0 H")&&!game.CPUreturned.getCard().equals("0 H")) {
+                     if(!playerCards.get(0).getCard().equals("1 H")&&!game.CPUreturned.getCard().equals("1 H")) {
                          setGamePanel(button1.getIcon(),GetCpuCardIcon(game.CPUreturned.getCard()));
                      }
                      PlayerCardLabler(game.playCards);
@@ -266,7 +266,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
                  {
                      System.out.println("Invalid");
                  }
-                 score.setText("CPU ("+game.score(game.cpuWins)+") - ("+game.score(game.playerWins)+") Player");
+                 score.setText("CPU ("+game.cpuScore()+") - ("+game.playerScore()+") Player");
                  ender();
                  return;
              }else {
@@ -284,7 +284,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
                  try {
 
                      game.play(1);
-                     if(!playerCards.get(1).getCard().equals("0 H")&&!game.CPUreturned.getCard().equals("0 H")) {
+                     if(!playerCards.get(1).getCard().equals("1 H")&&!game.CPUreturned.getCard().equals("1 H")) {
                          setGamePanel(button2.getIcon(),GetCpuCardIcon(game.CPUreturned.getCard()));
                          PlayerCardLabler(game.playCards);
 
@@ -293,7 +293,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
                  {
                      System.out.println("Invalid");
                  }
-                 score.setText("CPU ("+game.score(game.cpuWins)+") - ("+game.score(game.playerWins)+") Player");
+                 score.setText("CPU ("+game.cpuScore()+") - ("+game.playerScore()+") Player");
                  ender();
                  return;
              }else {
@@ -310,7 +310,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
              try {
 
                  game.play(2);
-                 if(!playerCards.get(2).getCard().equals("0 H")&&!game.CPUreturned.getCard().equals("0 H")) {
+                 if(!playerCards.get(2).getCard().equals("1 H")&&!game.CPUreturned.getCard().equals("1 H")) {
                      setGamePanel(button3.getIcon(),GetCpuCardIcon(game.CPUreturned.getCard()));
                      PlayerCardLabler(game.playCards);
 
@@ -318,7 +318,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
              } catch (Exception i) {
                  System.out.println("Invalid");
              }
-             score.setText("CPU ("+game.score(game.cpuWins)+") - ("+game.score(game.playerWins)+") Player");
+             score.setText("CPU ("+game.cpuScore()+") - ("+game.playerScore()+") Player");
              ender();
              return;
          }else {
@@ -337,7 +337,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
                  try {
 
                      game.play(3);
-                     if(!playerCards.get(3).getCard().equals("0 H")&&!game.CPUreturned.getCard().equals("0 H")) {
+                     if(!playerCards.get(3).getCard().equals("1 H")&&!game.CPUreturned.getCard().equals("1 H")) {
                          setGamePanel(button4.getIcon(),GetCpuCardIcon(game.CPUreturned.getCard()));
                          PlayerCardLabler(game.playCards);
 
@@ -346,7 +346,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
                  {
                      System.out.println("Invalid");
                  }
-                 score.setText("CPU ("+game.score(game.cpuWins)+") - ("+game.score(game.playerWins)+") Player");
+                 score.setText("CPU ("+game.cpuScore()+") - ("+game.playerScore()+") Player");
                  ender();
                  return;
              }else {
@@ -360,14 +360,14 @@ public class amaturufuGUI extends JFrame implements ActionListener {
 
      }
 
-     score.setText("CPU ("+game.score(game.cpuWins)+") - ("+game.score(game.playerWins)+") Player");
+     score.setText("CPU ("+game.cpuScore()+") - ("+game.playerScore()+") Player");
  }
 
     private void setGamePanel(Icon played,Icon cpu)
     {
 
             GamePanel1.setIcon(played);
-        if(!first&&cpuPlayedTwice){
+        if(!winner&&cpuPlayedTwice){
 
             delayFor3(getIcon(cpuTemp));
             // Create a new timer with 1 seconds delay
@@ -437,7 +437,7 @@ public class amaturufuGUI extends JFrame implements ActionListener {
         for (Card val:playerCards)
         {
             {
-                // Split the string and assign the first two characters of the second element to the image
+                // Split the string and assign the winner two characters of the second element to the image
                 String[] pic = val.toString().split(" ");
                 String image = pic[0] + pic[1].charAt(1) + ".png";
 
@@ -500,7 +500,7 @@ public Icon getIcon(Card Card)
 
     // Method to display a specific iturufu card
     public void iturufu_disp(String iturufu) {
-        // Extract the first character and the last two characters from the iturufu string
+        // Extract the winner character and the last two characters from the iturufu string
         String image = iturufu.substring(0,1).trim()+iturufu.substring(2,4).trim()+".png";
         // Create an ImageIcon object with the extracted image name
         ImageIcon card= new ImageIcon("Cards/SmallPNG/"+image);

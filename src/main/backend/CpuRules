@@ -1,0 +1,10 @@
+Amaturufu CPU RULES
+
+-If CPU play's first, play the card with the least points
+       Save the cards with the same suite as the Iturufu to play them later when the player plays cards worth more point
+
+-If CPU play's second,
+    check to see if the player played a card with the same suite as the Iturufu
+        if its not of high value, play the card with the least points
+        if it is of high value, and CPU has one with higher value, play the higher value card and eat
+        if it is of high value, and CPU does not have one with higher value, play the card with the least points
